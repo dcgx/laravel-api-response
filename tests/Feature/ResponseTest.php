@@ -1,40 +1,108 @@
 <?php
 
-namespace Devgoto\ApiResponse\Tests\Feature;
+namespace Devgoto\LaravelApiResponse\Tests\Feature;
 
 use Devgoto\Traits\BuildsResponse;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Orchestra\Testbench\TestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class ResponseTest extends TestCase
 {
-    protected object $service;
+    use BuildsResponse;
 
-    public function setUp(): void
+    /** @test */
+    public function it_returns_200_on_success_response()
     {
-        $this->service = $this->getObjectForTrait(BuildsResponse::class);
-        parent::setUp();
+        $response = $this->respondWithSuccess();
+
+        $this->assertEquals(Response::HTTP_OK, $response->status());
     }
 
-    /**
-     * @dataProvider successDefaultDataProvider
-     */
-    public function test_success_response_default(array $args)
+    /** @test */
+    public function it_returns_201_on_created_response()
     {
-        $response = $this->service->respondWithSuccess($args);
-        self::assertInstanceOf(JsonResponse::class, $response);
+        $response = $this->respondWithCreated();
+
+        $this->assertEquals(Response::HTTP_CREATED, $response->status());
     }
 
-    public function successDefaultDataProvider(): array
+    /** @test */
+    public function it_returns_202_on_accepted_response()
     {
-        return [
-            'respondWithSuccess(), default empty array' => [
-                'default' => [],
-                'args' => [],
-                'code' => Response::HTTP_OK,
-                'data' => []
-            ]
-        ];
+        $response = $this->respondWithAccepted();
+
+        $this->assertEquals(Response::HTTP_ACCEPTED, $response->status());
+    }
+
+    /** @test */
+    public function it_returns_204_on_no_content_response()
+    {
+        $response = $this->respondWithNoContent();
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->status());
+    }
+
+    /** @test */
+    public function it_returns_400_on_bad_request_response()
+    {
+        $response = $this->respondWithBadRequest();
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->status());
+    }
+
+    /** @test */
+    public function it_returns_401_on_unauthorized_response()
+    {
+        $response = $this->respondWithUnathorized();
+
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->status());
+    }
+
+    /** @test */
+    public function it_returns_403_on_not_found_response()
+    {
+        $response = $this->respondWithNotFound();
+
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->status());
+    }
+
+    /** @test */
+    public function it_returns_404_on_forbidden_response()
+    {
+        $response = $this->respondWithForbidden();
+
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->status());
+    }
+
+    /** @test */
+    public function it_returns_405_on_method_not_allowed_response()
+    {
+        $response = $this->respondWithMethodNotAllowed();
+
+        $this->assertEquals(Response::HTTP_METHOD_NOT_ALLOWED, $response->status());
+    }
+
+    /** @test */
+    public function it_returns_406_on_not_acceptable_response()
+    {
+        $response = $this->respondWithNotAcceptable();
+
+        $this->assertEquals(Response::HTTP_NOT_ACCEPTABLE, $response->status());
+    }
+
+    /** @test */
+    public function it_returns_418_on_teapot_response()
+    {
+        $response = $this->respondWithTeapot();
+
+        $this->assertEquals(Response::HTTP_I_AM_A_TEAPOT, $response->status());
+    }
+
+    /** @test */
+    public function it_returns_422_on_unprocessable_entity_response()
+    {
+        $response = $this->respondWithUnprocessableEntity();
+
+        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->status());
     }
 }

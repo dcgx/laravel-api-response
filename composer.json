@@ -22,7 +22,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Devgoto\\ApiResponse\\Tests\\": "tests"
+            "Devgoto\\LaravelApiResponse\\Tests\\": "tests"
         }
     },
     "scripts": {
